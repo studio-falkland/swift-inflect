@@ -1,4 +1,10 @@
-# swift-inflect
+<p align="center">
+
+![swift-inflect](./Documentation/logo.svg)
+
+</p>
+
+<p align="center">
 
 [![Swift 6.0+](https://img.shields.io/badge/Swift-6.0+-F05138?logo=swift&logoColor=white)](https://swift.org)
 [![SPM Compatible](https://img.shields.io/badge/SPM-compatible-4BC51D?logo=swift&logoColor=white)](https://swift.org/package-manager)
@@ -6,16 +12,18 @@
 [![Latest Release](https://img.shields.io/github/v/release/studio-falkland/swift-inflect?color=blue)](https://github.com/studio-falkland/swift-inflect/releases)
 [![License](https://img.shields.io/github/license/studio-falkland/swift-inflect)](LICENSE.md)
 
-A pure Swift port of the [Rust Inflector](https://github.com/whatisinternet/Inflector) library by Josh Teeter. Adds English string inflections to `String` and all numeric types — with zero external dependencies.
+</p>
 
-Supports camelCase, PascalCase, snake_case, SCREAMING_SNAKE_CASE, kebab-case, Train-Case, Sentence case, Title Case, ClassCase, table_case, ordinalize/deordinalize, foreign key, pluralize, singularize, demodulize, and deconstantize.
+## Introduction
+`swift-inflect` is a pure Swift port of the [Rust Inflector](https://github.com/whatisinternet/Inflector) library by Josh Teeter. It adds English string inflections to `String` and all numeric types with zero external dependencies.
 
----
-
-## Requirements
-
-- Swift 6.0+
-- macOS 12+ / iOS 15+ / tvOS 15+ / watchOS 8+ / Linux
+You can use to conver to: 
+* camelCase
+* PascalCase
+* snake_case
+* SCREAMING_SNAKE_CASE
+* kebab-case
+* and many more...
 
 ## Installation
 
@@ -31,8 +39,6 @@ targets: [
     ]),
 ]
 ```
-
----
 
 ## API
 
@@ -108,8 +114,6 @@ Each case has a matching boolean predicate — a computed property with no paren
 "Test::Foo::Bar".deconstantized() // "Foo"
 ```
 
----
-
 ## Usage example
 
 ```swift
@@ -136,10 +140,11 @@ print(11.ordinalized())  // 11th
 swift test
 ```
 
----
-
 ## Authors
-This library was created by Lei Nelissen from Studio Falkland.
+
+![Studio Falkland](./Documentation/falkland-logo-long-orange.svg)
+
+This library is brought to you by Studio Falkland and was developed by Lei Nelissen.
 
 ### Original Rust library
 
@@ -149,11 +154,8 @@ This library is a Swift port of **Inflector** by Josh Teeter.
 - Documentation: <https://docs.rs/Inflector>
 - Crates.io: <https://crates.io/crates/Inflector>
 
----
-
 ## License
-
-BSD 2-Clause. See [LICENSE.md](LICENSE.md).
+This package is open-source software licensed under BSD 2-Clause. See [LICENSE.md](LICENSE.md).
 
 Original Rust library copyright © 2017 Josh Teeter.
 Swift port additions follow the same licence.
