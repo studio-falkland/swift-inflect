@@ -1,17 +1,12 @@
 <p align="center">
-
-![swift-inflect](./Documentation/logo.svg)
-
+<img src="./Documentation/logo.svg" />
 </p>
 
 <p align="center">
-
-[![Swift 6.0+](https://img.shields.io/badge/Swift-6.0+-F05138?logo=swift&logoColor=white)](https://swift.org)
-[![SPM Compatible](https://img.shields.io/badge/SPM-compatible-4BC51D?logo=swift&logoColor=white)](https://swift.org/package-manager)
-[![Platforms](https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-lightgrey)](https://github.com/studio-falkland/swift-inflect)
-[![Latest Release](https://img.shields.io/github/v/release/studio-falkland/swift-inflect?color=blue)](https://github.com/studio-falkland/swift-inflect/releases)
-[![License](https://img.shields.io/github/license/studio-falkland/swift-inflect)](LICENSE.md)
-
+  <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-6.0+-F05138?logo=swift&logoColor=white" alt="Swift 6.0+"></a>
+  <a href="https://swift.org/package-manager"><img src="https://img.shields.io/badge/SPM-compatible-4BC51D?logo=swift&logoColor=white" alt="SPM Compatible"></a>
+  <a href="https://github.com/studio-falkland/swift-inflect/releases"><img src="https://img.shields.io/github/v/release/studio-falkland/swift-inflect?color=blue" alt="Latest Release"></a>
+  <a href="LICENSE.md"><img src="https://img.shields.io/github/license/studio-falkland/swift-inflect" alt="License"></a>
 </p>
 
 ## Introduction
