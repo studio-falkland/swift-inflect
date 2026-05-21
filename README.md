@@ -2,6 +2,8 @@
 <img src="./Documentation/logo.svg" />
 </p>
 
+<p></p>
+
 <p align="center">
   <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-6.0+-F05138?logo=swift&logoColor=white" alt="Swift 6.0+"></a>
   <a href="https://swift.org/package-manager"><img src="https://img.shields.io/badge/SPM-compatible-4BC51D?logo=swift&logoColor=white" alt="SPM Compatible"></a>
@@ -12,7 +14,7 @@
 ## Introduction
 `swift-inflect` is a pure Swift port of the [Rust Inflector](https://github.com/whatisinternet/Inflector) library by Josh Teeter. It adds English string inflections to `String` and all numeric types with zero external dependencies.
 
-You can use to conver to: 
+You can use to convert into: 
 * camelCase
 * PascalCase
 * snake_case
