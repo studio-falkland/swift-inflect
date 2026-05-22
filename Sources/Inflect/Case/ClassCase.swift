@@ -3,7 +3,7 @@
 /// The algorithm first PascalCases the input, then finds the last uppercase
 /// letter, splits there, and singularises the trailing portion.
 /// Examples: `"foo"` → `"Foo"`, `"foo_bars"` → `"FooBar"`
-func toClassCase(_ string: String) -> String {
+func toClassCase(_ string: borrowing String) -> String {
     let pascal = toPascalCase(string)
 
     // Find the last uppercase letter — that is where the final word starts.
@@ -20,6 +20,6 @@ func toClassCase(_ string: String) -> String {
 }
 
 /// Returns `true` when `string` is already in ClassCase.
-func isClassCase(_ string: String) -> Bool {
+func isClassCase(_ string: borrowing String) -> Bool {
     toClassCase(string) == string
 }

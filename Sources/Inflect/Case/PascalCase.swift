@@ -2,7 +2,7 @@
 ///
 /// Identical to camelCase except the first word is also capitalised.
 /// Examples: `"foo_bar"` → `"FooBar"`, `"fooBar"` → `"FooBar"`
-func toPascalCase(_ string: String) -> String {
+func toPascalCase(_ string: borrowing String) -> String {
     toCaseCamelLike(string, options: CamelOptions(
         newWord: true,
         lastChar: " ",
@@ -14,6 +14,6 @@ func toPascalCase(_ string: String) -> String {
 }
 
 /// Returns `true` when `string` is already in PascalCase.
-func isPascalCase(_ string: String) -> Bool {
+func isPascalCase(_ string: borrowing String) -> Bool {
     toPascalCase(string) == string
 }

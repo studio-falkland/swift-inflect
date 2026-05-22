@@ -2,33 +2,11 @@
 
 /// Removes trailing non-alphanumeric characters from `s`.
 /// Mirrors Rust's `trim_right` / `trim_end_matches(is_not_alphanumeric)`.
-func trimTrailingNonAlphanumeric(_ s: String) -> String {
-    String(s.reversed().drop(while: { !$0.isLetter && !$0.isNumber }).reversed())
-}
-
-/// Returns `true` when `c` is not a lowercase letter.
-///
-/// In the Rust source `char_is_uppercase` is defined as
-/// `test_char == test_char.to_ascii_uppercase()`, which means digits and
-/// punctuation also satisfy the condition.  The Swift equivalent is simply
-/// "not a lowercase letter".
-private func isUppercaseRust(_ c: Character) -> Bool {
-    !c.isLowercase
-}
-
-/// Returns `true` when a word-separator should be inserted *before* `chars[index]`.
-///
-/// Mirrors Rust's `requires_seperator`: fires when the current character is
-/// uppercase (in the Rust sense) and either the next or previous character is
-/// lowercase, signalling a camelCase boundary such as the `B` in `"fooBar"`.
-private func requiresSeparator(at index: Int, isFirst: Bool, in chars: [Character]) -> Bool {
-    guard !isFirst else { return false }
-    guard isUppercaseRust(chars[index]) else { return false }
-
-    let nextIsLower = (index + 1 < chars.count) && chars[index + 1].isLowercase
-    let prevIsLower = (index > 0) && chars[index - 1].isLowercase
-
-    return nextIsLower || prevIsLower
+func trimTrailingNonAlphanumeric(_ s: borrowing String) -> String {
+    guard let lastIdx = s.lastIndex(where: { $0.isLetter || $0.isNumber }) else {
+        return ""
+    }
+    return String(s[...lastIdx])
 }
 
 // MARK: - Core conversion functions
@@ -39,12 +17,19 @@ private func requiresSeparator(at index: Int, isFirst: Bool, in chars: [Characte
 ///   - string: The source string.
 ///   - replaceWith: The separator character (`_` or `-`).
 ///   - upper: Pass `true` to uppercase every output character (SCREAMING_SNAKE).
-func toCaseSnakeLike(_ string: String, replaceWith: Character, upper: Bool) -> String {
-    var firstCharacter = true
+func toCaseSnakeLike(_ string: borrowing String, replaceWith: Character, upper: Bool) -> String {
+    let trimmed = trimTrailingNonAlphanumeric(string)
     var result = ""
-    let chars = Array(trimTrailingNonAlphanumeric(string))
+    result.reserveCapacity(trimmed.count)
 
-    for (index, char) in chars.enumerated() {
+    var firstCharacter = true
+    var prevChar: Character? = nil
+
+    var idx = trimmed.startIndex
+    while idx < trimmed.endIndex {
+        let char = trimmed[idx]
+        let nextIdx = trimmed.index(after: idx)
+
         if !char.isLetter && !char.isNumber {
             // Non-alphanumeric → treat as separator.
             // Collapse consecutive separators into one.
@@ -52,16 +37,28 @@ func toCaseSnakeLike(_ string: String, replaceWith: Character, upper: Bool) -> S
                 firstCharacter = true
                 result.append(replaceWith)
             }
-        } else if requiresSeparator(at: index, isFirst: firstCharacter, in: chars) {
-            // camelCase boundary detected: insert separator then the character.
-            firstCharacter = false
-            result.append(replaceWith)
-            result += upper ? char.uppercased() : char.lowercased()
         } else {
-            // Ordinary character — just case it.
+            // isUppercaseRust: a character is "uppercase" in the Rust sense
+            // when it is not a lowercase letter (digits and punctuation qualify).
+            let charIsUppercaseRust = !char.isLowercase
+
+            // Requires a separator when:
+            //   • we've already emitted at least one character (!firstCharacter)
+            //   • the current char is "uppercase" (in the Rust sense)
+            //   • the next OR previous input char is lowercase (camelCase boundary)
+            let nextIsLower = nextIdx < trimmed.endIndex && trimmed[nextIdx].isLowercase
+            let prevIsLower = prevChar?.isLowercase ?? false
+
+            if !firstCharacter && charIsUppercaseRust && (nextIsLower || prevIsLower) {
+                result.append(replaceWith)
+            }
+
             firstCharacter = false
             result += upper ? char.uppercased() : char.lowercased()
         }
+
+        prevChar = char
+        idx = nextIdx
     }
 
     return result
@@ -74,12 +71,13 @@ func toCaseSnakeLike(_ string: String, replaceWith: Character, upper: Bool) -> S
 /// subtlety is that `lastChar` is only updated in the plain-letter branch —
 /// it is *not* updated when a word-start character is emitted — which is
 /// intentional and matches the Rust behaviour.
-func toCaseCamelLike(_ string: String, options: CamelOptions) -> String {
+func toCaseCamelLike(_ string: borrowing String, options: CamelOptions) -> String {
     var newWord = options.newWord
     var firstWord = options.firstWord
     var lastChar = options.lastChar
     var foundRealChar = false
     var result = ""
+    result.reserveCapacity(string.count)
 
     for char in trimTrailingNonAlphanumeric(string) {
         let isSep = !char.isLetter && !char.isNumber

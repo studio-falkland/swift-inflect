@@ -3,7 +3,7 @@
 /// The algorithm first snake_cases the input, then splits at the last `_` and
 /// pluralises the trailing portion.
 /// Examples: `"fooBar"` → `"foo_bars"`, `"foo"` → `"foos"`
-func toTableCase(_ string: String) -> String {
+func toTableCase(_ string: borrowing String) -> String {
     let snaked = toSnakeCase(string)
 
     // Find the last underscore — that is where the final word starts.
@@ -20,6 +20,6 @@ func toTableCase(_ string: String) -> String {
 }
 
 /// Returns `true` when `string` is already in table_case.
-func isTableCase(_ string: String) -> Bool {
+func isTableCase(_ string: borrowing String) -> Bool {
     toTableCase(string) == string
 }

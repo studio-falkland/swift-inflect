@@ -4,7 +4,7 @@
 /// separated by a space.  `inverted: true` causes the camel-like algorithm
 /// to lowercase word-start characters after the first word.
 /// Examples: `"fooBar"` → `"Foo bar"`, `"foo_bar"` → `"Foo bar"`
-func toSentenceCase(_ string: String) -> String {
+func toSentenceCase(_ string: borrowing String) -> String {
     toCaseCamelLike(string, options: CamelOptions(
         newWord: true,
         lastChar: " ",
@@ -16,6 +16,6 @@ func toSentenceCase(_ string: String) -> String {
 }
 
 /// Returns `true` when `string` is already in Sentence case.
-func isSentenceCase(_ string: String) -> Bool {
+func isSentenceCase(_ string: borrowing String) -> Bool {
     toSentenceCase(string) == string
 }

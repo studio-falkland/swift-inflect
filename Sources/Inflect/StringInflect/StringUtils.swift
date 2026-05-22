@@ -1,26 +1,25 @@
 /// Splits `string` on every `"::"` occurrence and returns the components.
 ///
-/// A pure-Swift alternative to `Foundation.components(separatedBy:)` that
-/// carries no platform availability requirements.
-/// Examples: `"Foo::Bar"` → `["Foo", "Bar"]`, `"A::B::C"` → `["A", "B", "C"]`
-func splitOnDoubleColon(_ string: String) -> [String] {
+/// Uses index-based iteration to avoid converting the String to an Array of
+/// Characters. Examples: `"Foo::Bar"` → `["Foo", "Bar"]`, `"A::B::C"` → `["A", "B", "C"]`
+func splitOnDoubleColon(_ string: borrowing String) -> [String] {
     var parts: [String] = []
-    var current = ""
-    let chars = Array(string)
-    var i = 0
+    var segmentStart = string.startIndex
+    var idx = string.startIndex
 
-    while i < chars.count {
-        if chars[i] == ":", i + 1 < chars.count, chars[i + 1] == ":" {
-            // Found "::": flush current component and skip both colons.
-            parts.append(current)
-            current = ""
-            i += 2
-        } else {
-            current.append(chars[i])
-            i += 1
+    while idx < string.endIndex {
+        if string[idx] == ":" {
+            let next = string.index(after: idx)
+            if next < string.endIndex && string[next] == ":" {
+                parts.append(String(string[segmentStart..<idx]))
+                idx = string.index(after: next)
+                segmentStart = idx
+                continue
+            }
         }
+        idx = string.index(after: idx)
     }
 
-    parts.append(current)
+    parts.append(String(string[segmentStart...]))
     return parts
 }

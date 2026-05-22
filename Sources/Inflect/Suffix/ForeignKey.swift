@@ -15,6 +15,6 @@ func toForeignKey(_ string: String) -> String {
 }
 
 /// Returns `true` when `string` is already a valid foreign key name.
-func isForeignKey(_ string: String) -> Bool {
+func isForeignKey(_ string: borrowing String) -> Bool {
     toForeignKey(string) == string
 }

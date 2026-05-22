@@ -75,20 +75,29 @@ private let singularSpecialCases: [String: String] = [
 /// For example, given template `"$2"` and a match where group 2 is `"x"`,
 /// the result is `"x"`.  Digits immediately following `$` are consumed as the
 /// group index; any other characters are passed through verbatim.
+///
+/// Most replacement templates contain no `$`; the fast-path short-circuits for
+/// those (25 of the 27 singularisation rules), avoiding all character iteration.
 private func expandTemplate(_ template: String, match: NSTextCheckingResult, in ns: NSString) -> String {
-    var result = ""
-    let chars = Array(template)
-    var i = 0
+    // Fast path: no back-reference to expand — return the template verbatim.
+    guard template.contains("$") else { return template }
 
-    while i < chars.count {
-        if chars[i] == "$", i + 1 < chars.count, let digit = chars[i + 1].wholeNumberValue {
+    var result = ""
+    var idx = template.startIndex
+
+    while idx < template.endIndex {
+        let char = template[idx]
+        let nextIdx = template.index(after: idx)
+
+        if char == "$", nextIdx < template.endIndex,
+           let digit = template[nextIdx].wholeNumberValue {
             // Substitute capture group `digit`.
             let r = match.range(at: digit)
             if r.location != NSNotFound { result += ns.substring(with: r) }
-            i += 2
+            idx = template.index(after: nextIdx)
         } else {
-            result.append(chars[i])
-            i += 1
+            result.append(char)
+            idx = nextIdx
         }
     }
 

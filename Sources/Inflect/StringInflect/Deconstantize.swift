@@ -2,7 +2,7 @@
 ///
 /// If `string` contains no `"::"` an empty string is returned.
 /// Examples: `"Foo::Bar"` → `"Foo"`, `"Test::Foo::Bar"` → `"Foo"`, `"Bar"` → `""`
-func deconstantize(_ string: String) -> String {
+func deconstantize(_ string: borrowing String) -> String {
     guard string.contains("::") else { return "" }
 
     let parts = splitOnDoubleColon(string)

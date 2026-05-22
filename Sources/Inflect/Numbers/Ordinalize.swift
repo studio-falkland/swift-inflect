@@ -9,11 +9,11 @@ func ordinalize(_ string: String) -> String {
     // If the last character is not a digit, the string is already non-numeric.
     guard let last = string.last, last.isNumber else { return string }
 
-    let chars = Array(string)
-
-    if chars.count > 1 {
+    if string.count > 1 {
         // Numbers whose tens digit is 1 (11th, 12th, 13th, 111th, …) always use "th".
-        if chars[chars.count - 2] == "1" { return string + "th" }
+        // Access the second-to-last character via index arithmetic.
+        let penultimate = string[string.index(string.endIndex, offsetBy: -2)]
+        if penultimate == "1" { return string + "th" }
 
         // Decimal numbers are returned as-is.
         if string.contains(".") { return string }

@@ -2,7 +2,7 @@
 ///
 /// Every word is capitalised and words are joined with `-`.
 /// Examples: `"fooBar"` → `"Foo-Bar"`, `"foo_bar"` → `"Foo-Bar"`
-func toTrainCase(_ string: String) -> String {
+func toTrainCase(_ string: borrowing String) -> String {
     toCaseCamelLike(string, options: CamelOptions(
         newWord: true,
         lastChar: " ",
@@ -14,6 +14,6 @@ func toTrainCase(_ string: String) -> String {
 }
 
 /// Returns `true` when `string` is already in Train-Case.
-func isTrainCase(_ string: String) -> Bool {
+func isTrainCase(_ string: borrowing String) -> Bool {
     toTrainCase(string) == string
 }
