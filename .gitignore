@@ -3,3 +3,5 @@
 .swiftpm/
 
 .DS_Store
+
+Benchmarks/.benchmarkBaselines/
