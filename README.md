@@ -20,6 +20,7 @@ You can use to convert into:
 * snake_case
 * SCREAMING_SNAKE_CASE
 * kebab-case
+* a URL-safe slug
 * and many more...
 
 ## Installation
@@ -51,6 +52,7 @@ All methods are available as extensions on `String`. Transformation methods retu
 | `toScreamingSnakeCase()` | `"fooBar"` → `"FOO_BAR"` |
 | `toKebabCase()` | `"fooBar"` → `"foo-bar"` |
 | `toTrainCase()` | `"fooBar"` → `"Foo-Bar"` |
+| `toSlug()` | `"Foo, bar!"` → `"foo-bar"` |
 | `toSentenceCase()` | `"fooBar"` → `"Foo bar"` |
 | `toTitleCase()` | `"fooBar"` → `"Foo Bar"` |
 | `toClassCase()` | `"foo_bars"` → `"FooBar"` |
@@ -63,6 +65,7 @@ Each case has a matching boolean predicate — a computed property with no paren
 "foo_bar".isSnakeCase         // true
 "FOO_BAR".isScreamingSnakeCase // true
 "Foo-Bar".isTrainCase         // true
+"hello-world".isSlug          // true
 ```
 
 ### Numbers
@@ -111,6 +114,17 @@ Each case has a matching boolean predicate — a computed property with no paren
 "Test::Foo::Bar".deconstantized() // "Foo"
 ```
 
+### Slug
+
+`toSlug()` is meant for generating URL slugs. Non-alphanumeric characters are dropped, 
+Latin diacritics are folded to ASCII (`é` → `e`), and words are joined with `-`.
+
+```swift
+"Hello, World!".toSlug() // "hello-world"
+"Café Olé".toSlug()      // "cafe-ole"
+"foo bar".toSlug()       // "foo-bar"
+```
+
 ## Usage example
 
 ```swift
@@ -126,6 +140,9 @@ print(s.toTableCase())         // foo_bar_bazs  (snake + pluralise last word)
 
 print("replies".singularized()) // reply
 print("knife".pluralized())     // knives
+
+print("Hello, World!".toSlug()) // hello-world
+print("Café Olé".toSlug())      // cafe-ole
 
 print(42.ordinalized())  // 42nd
 print(11.ordinalized())  // 11th

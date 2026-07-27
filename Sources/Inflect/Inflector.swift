@@ -44,6 +44,14 @@ extension String {
     /// `true` if the string is already Train-Case.
     public var isTrainCase: Bool { Inflect.isTrainCase(self) }
 
+    /// Converts to a URL-safe slug. e.g. `"Hello, World!"` → `"hello-world"`,
+    /// `"Café Olé"` → `"cafe-ole"`. Non-alphanumerics are dropped and Latin
+    /// diacritics are folded to their ASCII equivalents.
+    public func toSlug() -> String { Inflect.toSlug(self) }
+
+    /// `true` if the string is already a valid slug.
+    public var isSlug: Bool { Inflect.isSlug(self) }
+
     /// Converts to Sentence case. e.g. `"fooBar"` → `"Foo bar"`
     public func toSentenceCase() -> String { Inflect.toSentenceCase(self) }
 

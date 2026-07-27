@@ -71,6 +71,63 @@ import Testing
     @Test func isNotTrainCaseAlt() { #expect("foo-Bar".isTrainCase == false) }
 }
 
+// MARK: - Slug
+
+@Suite("Slug") struct SlugTests {
+
+    /// "fooBar" → "foo-bar"
+    @Test func toSlug() { #expect("fooBar".toSlug() == "foo-bar") }
+
+    @Test func isSlug() { #expect("foo-bar".isSlug == true) }
+    @Test func isNotSlug() { #expect("fooBar".isSlug == false) }
+
+    // Already-slug input passes through unchanged.
+    @Test func slugAlreadySlug() { #expect("hello-world".toSlug() == "hello-world") }
+
+    // Spaces, hyphens and underscores all collapse to a single `-`.
+    @Test func slugCollapsesSeparators() { #expect("foo---bar".toSlug() == "foo-bar") }
+    @Test func slugCollapsesMixedSeparators() { #expect("foo _- bar".toSlug() == "foo-bar") }
+
+    // Spaces are treated as word separators.
+    @Test func slugFromSpaces() { #expect("hello world".toSlug() == "hello-world") }
+    @Test func slugFromMultipleSpaces() { #expect("hello   world".toSlug() == "hello-world") }
+    @Test func slugFromSpacesAroundCamelCase() { #expect("Hello World".toSlug() == "hello-world") }
+    @Test func slugFromSentence() { #expect("The quick brown fox".toSlug() == "the-quick-brown-fox") }
+
+    // Leading and trailing separators are stripped.
+    @Test func slugStripsLeadingSeparators() { #expect("---foo bar".toSlug() == "foo-bar") }
+    @Test func slugStripsTrailingSeparators() { #expect("foo bar---".toSlug() == "foo-bar") }
+
+    // Non-alphanumeric characters are dropped entirely (URL-slug convention),
+    // so surrounding letters are joined together. Punctuation, symbols,
+    // brackets and apostrophes are all stripped.
+    @Test func slugDropsPunctuation() { #expect("Hello, World!".toSlug() == "hello-world") }
+    @Test func slugDropsSymbols() { #expect("foo@bar#baz$qux".toSlug() == "foo-bar-baz-qux") }
+    @Test func slugDropsBrackets() { #expect("[foo] (bar) {baz}".toSlug() == "foo-bar-baz") }
+    // Apostrophes and other non-alphanumerics become a single separator. The
+    // following letter is treated as a word start, matching the snake/kebab
+    // behaviour of the rest of the library.
+    @Test func slugDropsApostrophe() { #expect("don't stop".toSlug() == "don-t-stop") }
+
+    // Digits are preserved; an uppercase letter after digits starts a new
+    // word (mirrors the camelCase split used elsewhere in the library).
+    @Test func slugPreservesDigits() { #expect("foo123bar".toSlug() == "foo-123bar") }
+    @Test func slugDigitBoundary() { #expect("foo2Bar".toSlug() == "foo-2bar") }
+    @Test func slugDigitAfterWord() { #expect("foo 2 bar".toSlug() == "foo-2-bar") }
+    @Test func slugTrailingDigits() { #expect("item42".toSlug() == "item-42") }
+
+    // Latin accented letters are transliterated to ASCII so the output is
+    // safe for URLs. Combining diacritics on their own are dropped.
+    @Test func slugTransliteratesAccents() { #expect("Café Olé".toSlug() == "cafe-ole") }
+    @Test func slugTransliteratesUmlauts() { #expect("naïve façade".toSlug() == "naive-facade") }
+    @Test func slugTransliteratesEñe() { #expect("El Niño".toSlug() == "el-nino") }
+    @Test func slugStripsCombiningMarks() { #expect("zo\u{0301}ology".toSlug() == "zoology") }
+
+    // All non-alphanumeric input collapses to an empty string.
+    @Test func slugAllSeparators() { #expect("---".toSlug() == "") }
+    @Test func slugAllPunctuation() { #expect("!@#$%".toSlug() == "") }
+}
+
 // MARK: - Sentence case
 
 @Suite("SentenceCase") struct SentenceCaseTests {
